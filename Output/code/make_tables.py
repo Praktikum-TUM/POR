@@ -89,30 +89,29 @@ def write_lambda_I_table():
     with open(OUT / 'results.json') as f:
         r = json.load(f)
     cd = r['current_dep']
-    I = cd['I']; uI = cd['u_I']
+    I = cd['I']
     lam = cd['lambda']; ul = cd['u_lambda']
     om = cd['omega_d']; uom = cd['u_omega_d']
     om0sq = cd['omega0sq_implied']
 
-    # Einheitliches Format mit 4 Nachkommastellen fuer lambda und omega_d,
-    # damit visuell ruhige Spalten entstehen; die Werte selbst bleiben
-    # gerundet auf das, was die Unsicherheiten zulassen.
     def fmt_unc(v, u, decimals=4):
         fmt_str = f'{{:.{decimals}f}}'
         return fmt_str.format(v).replace('.', ','), fmt_str.format(u).replace('.', ',')
 
     lines = [
-        r'\begin{tabular}{S[table-format=1.1] c c S[table-format=1.4]}',
+        r'\begin{tabular}{S[table-format=1.1] c c c}',
         r'\toprule',
-        r'{$I$ / \si{\ampere}} & $\lambda$ / \si{\per\second} & $\omega_d$ / \si{\per\second} & {$\omega_d^2{+}\lambda^2$ / \si{\per\square\second}} \\',
+        r'{$I$ / \si{\ampere}} & $\lambda$ / \si{\per\second} & $\omega_d$ / \si{\per\second} & $\omega_d^2{+}\lambda^2$ / \si{\per\square\second} \\',
         r'\midrule',
     ]
-    for i, ui, l, ul_, o, uo, om0 in zip(I, uI, lam, ul, om, uom, om0sq):
+    for i, l, ul_, o, uo, om0 in zip(I, lam, ul, om, uom, om0sq):
         si = f'{i:.1f}'.replace('.', ',')
         sl_v, sl_u = fmt_unc(l, ul_, decimals=4)
         so_v, so_u = fmt_unc(o, uo, decimals=4)
-        som0 = f'{om0:.4f}'.replace('.', ',')
-        lines.append(f'{si} & ${sl_v} \\pm {sl_u}$ & ${so_v} \\pm {so_u}$ & {som0} \\\\')
+        # Fehlerfortpflanzung: u(om^2 + lam^2) = sqrt((2*om*u_om)^2 + (2*lam*u_lam)^2)
+        u_om0 = (4 * o**2 * uo**2 + 4 * l**2 * ul_**2) ** 0.5
+        som0_v, som0_u = fmt_unc(om0, u_om0, decimals=4)
+        lines.append(f'{si} & ${sl_v} \\pm {sl_u}$ & ${so_v} \\pm {so_u}$ & ${som0_v} \\pm {som0_u}$ \\\\')
     lines.append(r'\bottomrule')
     lines.append(r'\end{tabular}')
     (TAB / 'lambda_I.tex').write_text('\n'.join(lines))
@@ -125,24 +124,32 @@ def write_vergleich_table():
     sw = r['stopwatch']; cm = r['cassy_main']
     eye = r['eye']; cd = r['current_dep']; rc = r['resonance']
 
-    def fmt(v, u, decimals):
+    def fmt(v, u):
+        """Format with 2 sig figs on uncertainty, value matched."""
+        import math
+        exp = int(math.floor(math.log10(abs(u))))
+        factor = 10 ** (exp - 1)
+        u_r = round(abs(u) / factor) * factor
+        decimals = max(0, -(exp - 1))
         fmt_str = f'{{:.{decimals}f}}'
-        return fmt_str.format(v).replace('.', ',') + r' \pm ' + fmt_str.format(u).replace('.', ',')
+        v_s = fmt_str.format(v).replace('.', ',')
+        u_s = fmt_str.format(u_r).replace('.', ',')
+        return v_s + r' \pm ' + u_s
 
     DASH = r'\textemdash'
     rows = [
         ('Stoppuhr, 10 Schwingungen', '$\\omega_d$',
-         fmt(sw['omega_d'], sw['u_omega_d'], 4), None),
+         fmt(sw['omega_d'], sw['u_omega_d']), None),
         ('CASSY, freie Schwingung', '$\\omega_d$',
-         fmt(cm['omega_d'], cm['u_omega_d'], 4),
-         fmt(cm['lambda'], cm['u_lambda'], 4)),
+         fmt(cm['omega_d'], cm['u_omega_d']),
+         fmt(cm['lambda'], cm['u_lambda'])),
         ('Augenamplituden', None, None,
-         fmt(eye['lambda'], eye['u_lambda'], 4)),
+         fmt(eye['lambda'], eye['u_lambda'])),
         ('Achsenabschnitt $\\omega_d^2{-}\\lambda^2$', '$\\omega_0$',
-         fmt(cd['omega_0_from_fit'], cd['u_omega_0_from_fit'], 4), None),
+         fmt(cd['omega_0_from_fit'], cd['u_omega_0_from_fit']), None),
         ('Resonanzkurve', '$\\omega_0$',
-         fmt(rc['omega_0'], rc['u_omega_0'], 4),
-         fmt(rc['lambda'], rc['u_lambda'], 4)),
+         fmt(rc['omega_0'], rc['u_omega_0']),
+         fmt(rc['lambda'], rc['u_lambda'])),
     ]
     lines = [
         r'\begin{tabular}{lcll}',

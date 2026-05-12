@@ -7,18 +7,17 @@
 \contentsline {section}{\numberline {3}Experimentelles Vorgehen}{2}{section.3}%
 \contentsline {section}{\numberline {4}Ergebnisse}{3}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Eigenfrequenz und Dämpfungskonstante bei $I=\SI {0,35}{\ampere }$}{3}{subsection.4.1}%
-\contentsline {paragraph}{\nonumberline Stoppuhrmessung.}{3}{paragraph*.3}%
-\contentsline {paragraph}{\nonumberline CASSY-Messung.}{3}{paragraph*.5}%
-\contentsline {paragraph}{\nonumberline Augenmessung der Amplituden.}{3}{paragraph*.8}%
+\contentsline {paragraph}{Stoppuhrmessung.}{3}{section*.2}%
+\contentsline {paragraph}{CASSY-Messung.}{3}{section*.3}%
+\contentsline {paragraph}{Augenmessung der Amplituden.}{3}{section*.5}%
 \contentsline {subsection}{\numberline {4.2}Stromabhängigkeit der Dämpfungskonstante}{4}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Eigenfrequenz als Funktion der Dämpfung}{5}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.3}Eigenfrequenz als Funktion der Dämpfung}{4}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}Resonanzkurve}{5}{subsection.4.4}%
-\contentsline {section}{\numberline {5}Diskussion}{6}{section.5}%
-\contentsline {paragraph}{\nonumberline Eigenfrequenz.}{6}{paragraph*.14}%
-\contentsline {paragraph}{\nonumberline Dämpfungskonstante.}{7}{paragraph*.17}%
-\contentsline {paragraph}{\nonumberline Systematische Drift von $\omega _0^2$.}{7}{paragraph*.19}%
-\contentsline {paragraph}{\nonumberline Stromabhängigkeit und Coulomb-Reibung.}{8}{paragraph*.22}%
-\contentsline {paragraph}{\nonumberline Resonanz und Literaturvergleich.}{8}{paragraph*.24}%
-\contentsline {section}{\numberline {6}Zusammenfassung}{8}{section.6}%
+\contentsline {section}{\numberline {5}Diskussion}{5}{section.5}%
+\contentsline {paragraph}{Eigenfrequenz.}{5}{section*.10}%
+\contentsline {paragraph}{Dämpfungskonstante.}{6}{section*.12}%
+\contentsline {paragraph}{Systematische Drift von $\omega _0^2$.}{6}{section*.13}%
+\contentsline {paragraph}{Stromabhängigkeit und Coulomb-Reibung.}{7}{section*.15}%
+\contentsline {paragraph}{Resonanz und Literaturvergleich.}{7}{section*.16}%
+\contentsline {section}{\numberline {6}Zusammenfassung}{7}{section.6}%
 \contentsline {section}{\numberline {A}Rohdaten}{8}{appendix.A}%
-\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

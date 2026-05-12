@@ -1,61 +1,55 @@
-% Praktikumsbericht POR (Pohlsches Rad)
-% Physikalisches Praktikum TU München
-\documentclass[11pt,a4paper,parskip=half]{scrartcl}
+\documentclass[11pt,a4paper]{article}
 
-\usepackage[ngerman]{babel}
+% --- Pakete ---
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
 \usepackage{lmodern}
-\usepackage[a4paper, margin=2.5cm]{geometry}
-\usepackage{microtype}
-\usepackage{graphicx}
-\usepackage{booktabs}
+\usepackage[a4paper, top=2.2cm, bottom=2.2cm, left=2.4cm, right=2.4cm]{geometry}
 \usepackage{amsmath, amssymb}
-\usepackage[locale=DE, separate-uncertainty=true,
-            output-decimal-marker={,}, range-phrase=--,
-            range-units=single]{siunitx}
-\usepackage{caption}
+\usepackage{siunitx}
+\sisetup{
+  output-decimal-marker={,},
+  separate-uncertainty=true,
+  per-mode=symbol,
+  range-units=single,
+  range-phrase=\,--\,,
+  exponent-product=\cdot
+}
+\usepackage{graphicx}
 \usepackage{subcaption}
-\captionsetup{font=small,labelfont=bf}
+\usepackage{booktabs}
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf}
 \usepackage{float}
-% Try harder to place floats nearby.
-\setcounter{topnumber}{3}
-\setcounter{bottomnumber}{2}
-\setcounter{totalnumber}{4}
-\renewcommand{\topfraction}{0.9}
-\renewcommand{\bottomfraction}{0.7}
-\renewcommand{\textfraction}{0.1}
-\renewcommand{\floatpagefraction}{0.7}
+\usepackage{microtype}
 \usepackage{hyperref}
 \hypersetup{hidelinks}
+\usepackage{enumitem}
+\setlist{nosep, leftmargin=*}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
 
-\sisetup{detect-all=true}
-
-\title{Pohlsches Rad (POR)}
-\subtitle{Praktikumsbericht, Physikalisches Praktikum TU München}
-\author{%
-  {}[NAME 1] \quad \texttt{[matrikelnr1@tum.de]} \\
-  {}[NAME 2] \quad \texttt{[matrikelnr2@tum.de]} \\
-  Kurs [KURSNR.], Team [TEAMNR.]%
-}
-\date{Durchführung: 12.\,Mai 2026 \quad\textbar\quad Ausarbeitung: \today\ (Version 1.0)}
+% --- Titel ---
+\title{\vspace{-1cm}\textbf{Pohlsches Rad (POR)}\\[2pt]
+\large Physikalisches Praktikum --- TU München}
+\author{Tamino Bruckmoser, Sebastian Richter \\ Team \emph{Tamastian}}
+\date{Durchführung: 12.\,Mai 2026}
 
 \begin{document}
+
 \maketitle
 
-\begin{abstract}
-\noindent Am Drehpendel werden Eigenfrequenz und Dämpfungskonstante
-aus freier Schwingung mit drei verschiedenen Methoden gemessen
-(Stoppuhr, CASSY, Resonanzkurve) und liefern übereinstimmend
-$\omega_0 \approx \SI{3,09}{\per\second}$. Die Stromabhängigkeit
-$\lambda(I)=cI^2$ der Wirbelstrombremse wird über knapp zwei Dekaden
-in $\lambda$ bestätigt, und die Beziehung $\tau\cdot\Delta\omega=1$
-ergibt sich aus der Resonanzkurve exakt zu eins. Im
-Augenamplituden-Diagramm und im konstanten Beitrag des
-$\lambda(I)$-Fits zeigt sich übereinstimmend eine kleine,
-stromunabhängige Restdämpfung.
-\end{abstract}
+\noindent
+\begin{tabular}{ll}
+  Kursnummer:    & 5 \\
+  Teamnummer:    & 5-07 \\
+  Versuchsname:  & Pohlsches Rad (POR) \\
+  Durchführung:  & 12.\,Mai 2026 \\
+  Ausarbeitung:  & 12.\,Mai 2026 (v1.0) \\
+\end{tabular}
 
+\vspace{1ex}\hrule\vspace{0.5ex}
 \tableofcontents
 
 % --------------------------------------------------------------------
@@ -172,24 +166,19 @@ diesen Effekt doppelt zählen \cite{ABW}. Hinzu kommt die
 Anzeigeauflösung
 $u_{\mathrm{B,Aufl}}=\SI{0,01}{\second}/(2\sqrt{3})\approx\SI{0,003}{\second}$,
 sodass insgesamt $u(t_{10})=\SI{0,010}{\second}$ folgt. Für die
-Periode der gedämpften Schwingung gilt damit
-\begin{equation*}
-  T_d = (2{,}0308 \pm 0{,}0010)\,\si{\second},
-  \qquad
-  \omega_d^{\mathrm{Stop}} = (3{,}0939 \pm 0{,}0016)\,\si{\per\second}.
-\end{equation*}
+Periode der gedämpften Schwingung ergibt sich
+$T_d = (2{,}0308 \pm 0{,}0010)\,\si{\second}$ und daraus
+$\omega_d^{\mathrm{Stop}} = (3{,}0939 \pm 0{,}0016)\,\si{\per\second}$.
 
 \paragraph{CASSY-Messung.}
 Das zeitlich aufgelöste Winkelsignal (Abbildung
 \ref{fig:cassy_fit}) wird ab dem Loslassen
-($t_0\approx\SI{5,98}{\second}$) an Gleichung (\ref{eq:freie_loesung})
-angepasst. Die Parameter ergeben sich zu
-\begin{equation*}
-  \omega_d^{\mathrm{CASSY}} = (3{,}0988 \pm 0{,}0007)\,\si{\per\second},
-  \qquad
-  \lambda^{\mathrm{CASSY}} = (0{,}1316 \pm 0{,}0007)\,\si{\per\second},
-\end{equation*}
-und damit die Abklingzeit $\tau = (7{,}60 \pm 0{,}04)\,\si{\second}$.
+($t_0\approx\SI{5,98}{\second}$) an Gleichung~(\ref{eq:freie_loesung})
+angepasst. Als Fitparameter ergeben sich
+$\omega_d^{\mathrm{CASSY}} = (3{,}09884 \pm 0{,}00067)\,\si{\per\second}$
+und $\lambda^{\mathrm{CASSY}} = (0{,}13163 \pm 0{,}00069)\,\si{\per\second}$,
+woraus die Abklingzeit $\tau^{\mathrm{CASSY}} = (7{,}597 \pm 0{,}040)\,\si{\second}$
+folgt.
 
 \begin{figure}[!ht]
 \centering
@@ -216,12 +205,10 @@ abnehmender Amplitude an relativem Gewicht gewinnt. Die Anpassung
 beschränkt sich daher auf die Punkte mit
 $A>\SI{1,5}{\centi\metre}$. Die gewichtete lineare Regression von
 $\ln A_n = \ln A_0 - \lambda T_d\,n$ liefert die Steigung
-$\lambda T_d=0{,}2556\pm 0{,}0024$. Mit $T_d$ aus der Stoppuhr folgt
-\begin{equation*}
-  \lambda^{\mathrm{Auge}} = (0{,}1258 \pm 0{,}0012)\,\si{\per\second},
-  \qquad
-  \tau^{\mathrm{Auge}} = (7{,}95 \pm 0{,}08)\,\si{\second}.
-\end{equation*}
+$\lambda T_d=0{,}2555\pm 0{,}0025$. Mit $T_d$ aus der Stoppuhrmessung
+folgt
+$\lambda^{\mathrm{Auge}} = (0{,}1258 \pm 0{,}0012)\,\si{\per\second}$
+und $\tau^{\mathrm{Auge}} = (7{,}947 \pm 0{,}078)\,\si{\second}$.
 Zum Vergleich werden die lokalen Amplitudenmaxima des
 CASSY-Signals aus Abb.~\ref{fig:cassy_fit} ebenfalls
 halblogarithmisch aufgetragen (Abbildung
@@ -258,16 +245,14 @@ Für jeden der \num{14} CASSY-Datensätze wird dieselbe Anpassung wie
 in Abbildung~\ref{fig:cassy_fit} durchgeführt. Die gewonnenen
 Dämpfungskonstanten $\lambda(I)$ sind in Abbildung
 \ref{fig:lambda_I} aufgetragen. Eine Anpassung $\lambda = c\,I^2$
-liefert
-\begin{equation*}
-  c = (0{,}936 \pm 0{,}013)\,\si{\per\second\per\square\ampere}.
-\end{equation*}
+liefert $c = (0{,}936 \pm 0{,}013)\,\si{\per\second\per\square\ampere}$.
 Lässt man zusätzlich einen Achsenabschnitt zu
-($\lambda = cI^2+b$), ergibt sich $b =
-(0{,}019\pm 0{,}009)\,\si{\per\second}$. Dieser Beitrag ist klein,
-aber mit Null nur knapp verträglich; er wird in der Diskussion
-gemeinsam mit der Coulomb-Reibung aus
-Abbildung~\ref{fig:amplituden} aufgegriffen.
+($\lambda = cI^2+b$), ergeben sich
+$c = (0{,}9038 \pm 0{,}0053)\,\si{\per\second\per\square\ampere}$ und
+$b = (0{,}0191 \pm 0{,}0019)\,\si{\per\second}$. Der
+Achsenabschnitt $b$ ist mit etwa $10\sigma$ klar signifikant von
+Null verschieden und wird in der Diskussion gemeinsam mit der
+Coulomb-Reibung aus Abbildung~\ref{fig:amplituden} aufgegriffen.
 
 \begin{figure}[!ht]
 \centering
@@ -284,19 +269,16 @@ $\omega_d^2$ gegen $\lambda^2$ eine Gerade mit Steigung $-1$ und
 Achsenabschnitt $\omega_0^2$ erwartet. Eine ungewichtete
 Ausgleichsgerade durch die Fitwerte aus
 Tabelle~\ref{tab:lambda_I_anh} (ohne den weiter unten begründeten
-Ausschluss bei $I=\SI{1,5}{\ampere}$) ergibt
-\begin{equation*}
-  \text{Steigung}\ -1{,}11 \pm 0{,}03,
-  \qquad
-  \omega_0^2 = (9{,}544\pm 0{,}037)\,\si{\per\square\second},
-\end{equation*}
-also $\omega_0^{\mathrm{Achse}} = (3{,}0894 \pm 0{,}0060)\,\si{\per\second}$.
+Ausschluss bei $I=\SI{1,5}{\ampere}$) liefert die Steigung
+$-1{,}106\pm 0{,}029$ und den Achsenabschnitt
+$\omega_0^2 = (9{,}545\pm 0{,}037)\,\si{\per\square\second}$,
+mithin $\omega_0^{\mathrm{Achse}} = (3{,}0894 \pm 0{,}0060)\,\si{\per\second}$.
 Der Punkt bei $I=\SI{1,5}{\ampere}$ enthält im Fitfenster nur
 \num{1{,}8} Schwingungsperioden, sodass die einzelnen Fitparameter
 $\lambda$ und $\omega_d$ dort wesentlich stärker streuen als die
 formal kleinen Statistik-Unsicherheiten suggerieren; er wird
 ausgeschlossen. Eine mit diesen Statistik-Unsicherheiten gewichtete
-Regression liefert formal die Steigung $-1{,}21\pm 0{,}01$,
+Regression liefert formal die Steigung $-1{,}210\pm 0{,}007$,
 übergewichtet aber Punkte, deren Statistikfehler die systematischen
 Modellabweichungen unterschätzen.
 
@@ -331,25 +313,18 @@ Regression enthalten.}
 \subsection{Resonanzkurve}
 Die Resonanzkurve (Abbildung \ref{fig:resonanz}) wird mit
 Gleichung~(\ref{eq:resonanz}) und den drei freien Parametern
-$M_0/\Theta$, $\omega_0$ und $\lambda$ angepasst:
-\begin{align*}
-  \omega_0^{\mathrm{Res}} &= (3{,}0915 \pm 0{,}0020)\,\si{\per\second}, &
-  \lambda^{\mathrm{Res}}   &= (0{,}1249 \pm 0{,}0023)\,\si{\per\second}.
-\end{align*}
-Daraus folgen die Resonanzfrequenz und die Abklingzeit
-\begin{equation*}
-  \omega_R = (3{,}0864 \pm 0{,}0020)\,\si{\per\second},
-  \qquad
-  \tau = (8{,}01 \pm 0{,}15)\,\si{\second}.
-\end{equation*}
+$M_0/\Theta$, $\omega_0$ und $\lambda$ angepasst. Sie liefert
+$\omega_0^{\mathrm{Res}} = (3{,}0915 \pm 0{,}0020)\,\si{\per\second}$
+und $\lambda^{\mathrm{Res}} = (0{,}1249 \pm 0{,}0023)\,\si{\per\second}$;
+daraus folgen die Resonanzfrequenz
+$\omega_R = (3{,}0864 \pm 0{,}0020)\,\si{\per\second}$ und die
+Abklingzeit $\tau^{\mathrm{Res}} = (8{,}01 \pm 0{,}15)\,\si{\second}$.
 Die Halbwertsbreite\footnote{Bezogen auf die Amplitude bei
 $A_{\max}/\sqrt{2}$; $\Delta\omega$ bezeichnet die halbe Breite
-(HWHM).} wird numerisch aus der angepassten Kurve bestimmt zu
-$\Delta\omega = \SI{0,125}{\per\second}$. Damit ist
-\begin{equation*}
-  \tau\cdot\Delta\omega = 1{,}00,
-\end{equation*}
-in Übereinstimmung mit Gleichung~(\ref{eq:tau_delta}).
+(HWHM).} wird numerisch aus der angepassten Kurve zu
+$\Delta\omega = \SI{0,125}{\per\second}$ bestimmt. Damit ist
+$\tau\cdot\Delta\omega = 1{,}00$, in Übereinstimmung mit
+Gleichung~(\ref{eq:tau_delta}).
 
 \begin{figure}[!ht]
 \centering
@@ -388,18 +363,19 @@ Dämpfungskonstante bei $I=\SI{0,35}{\ampere}$.}
 
 \paragraph{Dämpfungskonstante.}
 Auge und CASSY bei $I=\SI{0,35}{\ampere}$ ergeben
-$\lambda^{\mathrm{Auge}}=\SI{0,1258(12)}{\per\second}$ und
-$\lambda^{\mathrm{CASSY}}=\SI{0,1316(7)}{\per\second}$, ein
-Unterschied von $\SI{0,006}{\per\second}$ oder etwa $4\sigma$. Die
-Augenmessung ist auch nach Beschränkung auf
+$\lambda^{\mathrm{Auge}}=(0{,}1258\pm 0{,}0012)\,\si{\per\second}$
+und
+$\lambda^{\mathrm{CASSY}}=(0{,}13163\pm 0{,}00069)\,\si{\per\second}$,
+ein Unterschied von $\SI{0,006}{\per\second}$ oder etwa $4\sigma$.
+Die Augenmessung ist auch nach Beschränkung auf
 $A>\SI{1,5}{\centi\metre}$ durch die Ableseauflösung von
 \SI{0,1}{\centi\metre} stark begrenzt (bei $A=\SI{2}{\centi\metre}$
 sind das bereits $5\,\%$), und der schnellere Zerfall unterhalb
 dieser Schwelle (Abb.~\ref{fig:amplituden}) drückt die angepasste
 Steigung auch im verbliebenen Datenbereich noch leicht nach unten.
 Der Resonanzfit liefert mit
-$\lambda^{\mathrm{Res}}=\SI{0,1249(23)}{\per\second}$ einen Wert,
-der mit beiden Bestimmungen verträglich ist.
+$\lambda^{\mathrm{Res}}=(0{,}1249\pm 0{,}0023)\,\si{\per\second}$
+einen Wert, der mit beiden Bestimmungen verträglich ist.
 
 \paragraph{Systematische Drift von $\omega_0^2$.}
 Die Summe $\omega_d^2+\lambda^2$, die nach Theorie gleich
@@ -410,7 +386,7 @@ $\SI{9,55}{\per\square\second}$ bei mittlerer Dämpfung auf
 $\SI{9,27}{\per\square\second}$ bei $I=\SI{1,2}{\ampere}$
 (Abbildung~\ref{fig:omega0sq_drift}). Dieser Rückgang um etwa
 $4\,\%$ ist der Grund, warum die Ausgleichsgerade in
-Abb.~\ref{fig:omega_lambda} mit Steigung $-1{,}11\pm 0{,}03$
+Abb.~\ref{fig:omega_lambda} mit Steigung $-1{,}106\pm 0{,}029$
 geringfügig steiler verläuft als der theoretische Wert $-1$: bei
 großem $\lambda^2$ liegt $\omega_d^2$ tiefer, als das einfache
 Modell vorhersagt. Die Anfangsamplitude $A_0$ liegt für die
@@ -438,14 +414,15 @@ Median über alle Messungen mit $I\leq\SI{1,4}{\ampere}$.}
 
 \paragraph{Stromabhängigkeit und Coulomb-Reibung.}
 Über knapp zwei Dekaden in $\lambda$ folgen die Datenpunkte in
-Abb.~\ref{fig:lambda_I} der Parabel $\lambda=cI^2$. Der zusätzlich
-zugelassene Achsenabschnitt $b=\SI{0,019(9)}{\per\second}$ ist nur
-knapp mit Null verträglich, liegt aber wertmäßig genau in der
-Größenordnung jener konstanten Restdämpfung, die unabhängig im
-Augenamplituden-Diagramm an dem beschleunigten Zerfall kleiner
-Amplituden sichtbar wurde. Beide Beobachtungen sind mit einer
-geringen, stromunabhängigen Reibung (Lagerreibung, Luftwiderstand)
-konsistent.
+Abb.~\ref{fig:lambda_I} der Parabel $\lambda=cI^2$. Wird ein
+zusätzlicher Achsenabschnitt zugelassen, ergibt sich
+$b=(0{,}0191\pm 0{,}0019)\,\si{\per\second}$. Mit etwa $10\sigma$
+ist dieser Beitrag deutlich signifikant von Null verschieden und
+liegt zugleich in der Größenordnung jener konstanten Restdämpfung,
+die unabhängig im Augenamplituden-Diagramm am beschleunigten
+Zerfall der kleinen Amplituden zu sehen ist. Beide Befunde sind
+mit einer geringen, stromunabhängigen Reibung (Lagerreibung,
+Luftwiderstand) konsistent.
 
 \paragraph{Resonanz und Literaturvergleich.}
 Die Resonanzauswertung bestätigt die Beziehung
@@ -461,24 +438,27 @@ ermittelten Werte liegen alle in diesem Bereich.
 % --------------------------------------------------------------------
 Die Eigenfrequenz des Drehpendels wurde mit drei Methoden
 gemessen: die Stoppuhrmessung ergibt
-$\omega_d=\SI{3,0939(0,0016)}{\per\second}$, die CASSY-Anpassung der
-freien Schwingung $\omega_d=\SI{3,0988(0,0007)}{\per\second}$, und
-der Resonanzfit $\omega_0=\SI{3,0915(0,0020)}{\per\second}$.
-Sämtliche Werte sind miteinander verträglich. Die Dämpfungskonstante
-bei $I=\SI{0,35}{\ampere}$ beträgt nach Augenmessung
-$\SI{0,1258(0,0012)}{\per\second}$ und nach CASSY
-$\SI{0,1316(0,0007)}{\per\second}$. Der Resonanzfit liefert mit
-$\Delta\omega = \SI{0,125}{\per\second}$ und der zugehörigen
-Abklingzeit das Produkt $\tau\cdot\Delta\omega=1{,}00$ in
-Übereinstimmung mit der Theorie. Die Stromabhängigkeit der
-Wirbelstrombremse folgt über knapp zwei Dekaden in $\lambda$ der
-Form $\lambda(I)=cI^2$ mit
-$c=\SI{0,936(0,013)}{\per\second\per\square\ampere}$; ein
-zusätzlicher Achsenabschnitt $b=\SI{0,019(9)}{\per\second}$ zeigt
-sich konsistent mit der unabhängig im Augenamplituden-Diagramm
-sichtbaren Coulomb-artigen Restdämpfung. Innerhalb der angegebenen
-Unsicherheiten reproduzieren die Messungen das Modell des linearen
-harmonischen Oszillators und die quadratische Stromabhängigkeit der
+$\omega_d=(3{,}0939\pm 0{,}0016)\,\si{\per\second}$, die
+CASSY-Anpassung der freien Schwingung
+$\omega_d=(3{,}09884\pm 0{,}00067)\,\si{\per\second}$, der
+Resonanzfit $\omega_0=(3{,}0915\pm 0{,}0020)\,\si{\per\second}$.
+Sämtliche Werte sind miteinander verträglich. Die
+Dämpfungskonstante bei $I=\SI{0,35}{\ampere}$ beträgt nach
+Augenmessung $(0{,}1258\pm 0{,}0012)\,\si{\per\second}$ und nach
+CASSY $(0{,}13163\pm 0{,}00069)\,\si{\per\second}$. Der
+Resonanzfit liefert mit $\Delta\omega = \SI{0,125}{\per\second}$
+und der zugehörigen Abklingzeit das Produkt
+$\tau\cdot\Delta\omega=1{,}00$ in Übereinstimmung mit der Theorie.
+Die Stromabhängigkeit der Wirbelstrombremse folgt über knapp zwei
+Dekaden in $\lambda$ der Form $\lambda(I)=cI^2$ mit
+$c=(0{,}936\pm 0{,}013)\,\si{\per\second\per\square\ampere}$. Ein
+zusätzlich zugelassener Achsenabschnitt
+$b=(0{,}0191\pm 0{,}0019)\,\si{\per\second}$ ist mit etwa
+$10\sigma$ signifikant von Null verschieden und passt zu der
+unabhängig im Augenamplituden-Diagramm sichtbaren Coulomb-artigen
+Restdämpfung. Innerhalb der angegebenen Unsicherheiten
+reproduzieren die Messungen das Modell des linearen harmonischen
+Oszillators und die quadratische Stromabhängigkeit der
 Wirbelstrombremse.
 
 % --------------------------------------------------------------------
