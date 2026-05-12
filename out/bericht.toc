@@ -1,0 +1,25 @@
+\babel@toc {ngerman}{}\relax 
+\contentsline {section}{\numberline {1}Einleitung}{1}{section.1}%
+\contentsline {section}{\numberline {2}Grundlagen}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Freie gedämpfte Schwingung}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Erzwungene Schwingung und Resonanz}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Wirbelstrombremse}{2}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Experimentelles Vorgehen}{3}{section.3}%
+\contentsline {section}{\numberline {4}Ergebnisse}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Eigenfrequenz und Dämpfungskonstante bei $I=\SI {0,35}{\ampere }$}{3}{subsection.4.1}%
+\contentsline {paragraph}{\nonumberline Stoppuhrmessung.}{3}{paragraph*.3}%
+\contentsline {paragraph}{\nonumberline CASSY-Messung.}{3}{paragraph*.5}%
+\contentsline {paragraph}{\nonumberline Augenmessung der Amplituden.}{3}{paragraph*.8}%
+\contentsline {subsection}{\numberline {4.2}Stromabhängigkeit der Dämpfungskonstante}{5}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Eigenfrequenz als Funktion der Dämpfung}{5}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Resonanzkurve}{6}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Diskussion}{6}{section.5}%
+\contentsline {paragraph}{\nonumberline Eigenfrequenz.}{6}{paragraph*.14}%
+\contentsline {paragraph}{\nonumberline Dämpfungskonstante.}{6}{paragraph*.16}%
+\contentsline {paragraph}{\nonumberline $\omega _d^2$ gegen $\lambda ^2$ -- systematische Drift von $\omega _0^2$.}{7}{paragraph*.18}%
+\contentsline {paragraph}{\nonumberline Stromabhängigkeit und Coulomb-Reibung.}{7}{paragraph*.20}%
+\contentsline {paragraph}{\nonumberline Resonanzauswertung.}{7}{paragraph*.22}%
+\contentsline {paragraph}{\nonumberline Literaturvergleich.}{8}{paragraph*.24}%
+\contentsline {section}{\numberline {6}Zusammenfassung}{8}{section.6}%
+\contentsline {section}{\numberline {A}Rohdaten}{8}{appendix.A}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

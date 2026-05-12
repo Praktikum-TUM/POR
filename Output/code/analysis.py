@@ -61,14 +61,16 @@ def stopwatch_analysis():
     n = len(t10)
     mean = float(np.mean(t10))
     sigma_x = float(np.std(t10, ddof=1))
-    # Typ A: Student-t korrigiert.
+    # Typ A: Student-t korrigiert.  Bei einer periodischen Größe ist
+    # die Reaktionszeit-Streuung bereits in der Stichprobenstreuung der
+    # 5 Messungen enthalten; ein separater Typ-B-Beitrag würde
+    # doppelt zählen (vgl. ABW, Abschn. 4.2).
     t_fac = student_t_factor(n, '68')
     u_A = t_fac * sigma_x
-    # Typ B1: Reaktionszeit 0,2 s, rechteckverteilt.
-    u_B_react = 0.2 / np.sqrt(3)
-    # Typ B2: Auflösung 0,01 s, rechteckverteilt (digitale Anzeige).
+    u_B_react = None  # nicht verwendet (siehe oben)
+    # Typ B: Anzeigeauflösung 0,01 s rechteckverteilt.
     u_B_res = 0.01 / (2 * np.sqrt(3))
-    u_t10 = float(np.sqrt(u_A**2 + u_B_react**2 + u_B_res**2))
+    u_t10 = float(np.sqrt(u_A**2 + u_B_res**2))
 
     T = mean / 10.0
     u_T = u_t10 / 10.0
@@ -116,7 +118,12 @@ def eye_amplitude_analysis(T_period: float, u_T_period: float):
     u_A = 0.1  # cm, aus Excel notiert
 
     # Halblog-Fit: ln(A_n) = ln(A_0) - lambda * T * n
-    mask = A_mean > 0.3  # ignoriere zu kleine Werte (rel. Unsicherheit zu groß)
+    # Maske auf A > 1.5 cm: Bei kleineren Amplituden zerfällt die
+    # Schwingung deutlich schneller als exponentiell (Verhältnisse
+    # A_{n+1}/A_n fallen von ~0.77 auf <0.65) -- typisches Zeichen für
+    # eine zusätzliche näherungsweise konstante (Coulombsche)
+    # Reibungskraft, die das einfache lineare Modell verletzt.
+    mask = A_mean > 1.5
     n_fit = n_arr[mask]
     A_fit = A_mean[mask]
     ln_A = np.log(A_fit)
@@ -143,17 +150,16 @@ def eye_amplitude_analysis(T_period: float, u_T_period: float):
 
     # Plot
     fig, ax = plt.subplots(figsize=(6.4, 4.2))
-    # Alle Punkte, auch nicht im Fit
-    ax.errorbar(n_arr[A_mean > 0], A_mean[A_mean > 0], yerr=u_A,
+    ax.errorbar(n_arr[mask], A_mean[mask], yerr=u_A,
                 fmt='o', color='C0', markersize=5,
-                label='Mittel aus 2 Durchgängen')
-    # Fit-Gerade
-    n_grid = np.linspace(n_arr.min(), n_arr[mask].max(), 200)
+                label='Mittel aus 2 Durchgängen (im Fit)')
+    n_grid = np.linspace(n_arr.min(), n_arr.max(), 200)
     ax.plot(n_grid, np.exp(a0 + a1 * n_grid), 'r-', lw=1.5,
-            label=f'Anpassung: $\\lambda T = {abs(a1):.3f} \\pm {u_a1:.3f}$')
-    # Punkte außerhalb des Fits markieren
-    ax.plot(n_arr[~mask & (A_mean > 0)], A_mean[~mask & (A_mean > 0)], 'x',
-            color='gray', markersize=8, label='nicht im Fit (A < 0,3 cm)')
+            label=f'Anpassung: $\\lambda T_d = {abs(a1):.3f} \\pm {u_a1:.3f}$')
+    excluded = ~mask & (A_mean > 0)
+    ax.errorbar(n_arr[excluded], A_mean[excluded], yerr=u_A,
+                fmt='x', color='gray', markersize=7,
+                label=r'nicht im Fit ($A<1{,}5$\,cm)')
     ax.set_yscale('log')
     ax.set_xlabel('Schwingungszahl $n$')
     ax.set_ylabel('Amplitude $A_n$ / cm')
@@ -319,37 +325,79 @@ def current_dependence_analysis():
     plt.close(fig)
 
     # Aufgabe 7: omega_d^2 + lambda^2 = omega_0^2 (constant)
-    # Plot omega_d^2 vs lambda^2
+    # Der Datenpunkt bei I=1.5 A wird als Ausreisser markiert: das
+    # Fitfenster enthält dort nur ~1.8 Schwingungsperioden, sodass die
+    # Anpassung an Gl. (5) numerisch instabil ist (die scipy-Statistik
+    # unterschätzt die wahre Unsicherheit deutlich).
+    outlier_mask = np.isclose(I_arr, 1.5)
+    keep = ~outlier_mask
+
+    x_all = lam_arr**2
+    y_all = omega_arr**2
+    ux_all = 2 * lam_arr * u_lam_arr
+    uy_all = 2 * omega_arr * u_omega_arr
+
+    x = x_all[keep]; y = y_all[keep]
+    ux = ux_all[keep]; uy = uy_all[keep]
+
+    # Ungewichtete lineare Regression (Methode der kleinsten Quadrate).
+    # Die Statistik-Unsicherheiten aus dem CASSY-Fit sind sehr klein,
+    # spiegeln aber nur die rein zufaellige Streuung des cosinus-Modells
+    # gegen die Daten wider; systematische Modellbeitraege (z.B. leichte
+    # Reibung, Nichtlinearitaet) wirken auf alle Datenpunkte aehnlich
+    # und werden besser durch die Streuung der Punkte um die Gerade
+    # abgebildet.
+    n_pts = len(x)
+    Sx = x.sum(); Sy = y.sum()
+    Sxx = (x*x).sum(); Sxy = (x*y).sum()
+    D = n_pts*Sxx - Sx**2
+    intercept = (Sxx*Sy - Sx*Sxy)/D
+    slope = (n_pts*Sxy - Sx*Sy)/D
+    resid = y - (intercept + slope*x)
+    sigma_y_fit = float(np.sqrt((resid**2).sum() / (n_pts - 2)))
+    u_int = sigma_y_fit * np.sqrt(Sxx/D)
+    u_slope = sigma_y_fit * np.sqrt(n_pts/D)
+
     fig, ax = plt.subplots(figsize=(6.4, 4.2))
-    x = lam_arr**2
-    y = omega_arr**2
-    u_x = 2 * lam_arr * u_lam_arr
-    u_y = 2 * omega_arr * u_omega_arr
-    ax.errorbar(x, y, xerr=u_x, yerr=u_y, fmt='o', color='C0',
-                label='Cassy-Fitwerte', markersize=5)
-    # Theorie: y = omega_0^2 - x  (Steigung -1)
-    # Lineare Regression
-    w = 1 / u_y**2
-    S_w = w.sum(); S_wx = (w * x).sum(); S_wy = (w * y).sum()
-    S_wxx = (w * x**2).sum(); S_wxy = (w * x * y).sum()
-    D = S_w * S_wxx - S_wx**2
-    intercept = (S_wxx * S_wy - S_wx * S_wxy) / D
-    slope = (S_w * S_wxy - S_wx * S_wy) / D
-    u_int = np.sqrt(S_wxx / D)
-    u_slope = np.sqrt(S_w / D)
-    x_grid = np.linspace(0, x.max() * 1.05, 200)
+    ax.errorbar(x, y, xerr=ux, yerr=uy, fmt='o', color='C0',
+                label=r'Cassy-Fitwerte ($I\leq 1{,}4$\,A)', markersize=5)
+    ax.errorbar(x_all[outlier_mask], y_all[outlier_mask],
+                xerr=ux_all[outlier_mask], yerr=uy_all[outlier_mask],
+                fmt='s', color='gray', markersize=7,
+                label=r'$I=1{,}5$\,A: $<2$ Schwingungen im Fit')
+    x_grid = np.linspace(0, x_all.max() * 1.05, 200)
     ax.plot(x_grid, intercept + slope * x_grid, 'r-',
-            label=f'Anpassung: Steig. ${slope:.3f}\\pm{u_slope:.3f}$\n'
+            label=f'Anpassung: Steigung ${slope:.2f}\\pm{u_slope:.2f}$\n'
                   f'$\\omega_0^2 = {intercept:.3f}\\pm{u_int:.3f}$\\,s$^{{-2}}$')
     ax.plot(x_grid, intercept - x_grid, 'g--', alpha=0.7,
-            label='Theorie (Steigung $-1$)')
+            label='Theorie: Steigung $-1$')
     ax.set_xlabel(r'$\lambda^2$ / s$^{-2}$')
     ax.set_ylabel(r'$\omega_d^2$ / s$^{-2}$')
-    ax.legend()
+    ax.legend(loc='lower left')
     fig.savefig(FIG / 'aufgabe7_omega_lambda.pdf')
     plt.close(fig)
     omega_0 = float(np.sqrt(intercept))
     u_omega_0 = float(u_int / (2 * np.sqrt(intercept)))
+
+    # Zusätzlicher direkter Plot omega_d gegen lambda (Aufgabe 7 wörtlich).
+    fig, ax = plt.subplots(figsize=(6.4, 4.2))
+    ax.errorbar(lam_arr[keep], omega_arr[keep],
+                xerr=u_lam_arr[keep], yerr=u_omega_arr[keep],
+                fmt='o', color='C0', markersize=5,
+                label=r'Cassy-Fitwerte ($I\leq 1{,}4$\,A)')
+    ax.errorbar(lam_arr[outlier_mask], omega_arr[outlier_mask],
+                xerr=u_lam_arr[outlier_mask], yerr=u_omega_arr[outlier_mask],
+                fmt='s', color='gray', markersize=7,
+                label=r'$I=1{,}5$\,A (Ausreißer)')
+    lam_grid = np.linspace(0, max(lam_arr) * 1.05, 200)
+    omega_th = np.sqrt(np.maximum(omega_0**2 - lam_grid**2, 0))
+    ax.plot(lam_grid, omega_th, 'r-',
+            label=fr'$\sqrt{{\omega_0^2-\lambda^2}}$, $\omega_0={omega_0:.3f}$\,s$^{{-1}}$')
+    ax.set_xlabel(r'Dämpfungskonstante $\lambda$ / s$^{-1}$')
+    ax.set_ylabel(r'Eigenkreisfrequenz $\omega_d$ / s$^{-1}$')
+    ax.legend()
+    fig.savefig(FIG / 'aufgabe7_omega_lambda_direkt.pdf')
+    plt.close(fig)
     return {
         'I': I_arr.tolist(),
         'u_I': u_I.tolist(),
