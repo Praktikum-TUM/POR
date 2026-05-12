@@ -92,31 +92,72 @@ def write_lambda_I_table():
     I = cd['I']; uI = cd['u_I']
     lam = cd['lambda']; ul = cd['u_lambda']
     om = cd['omega_d']; uom = cd['u_omega_d']
+    om0sq = cd['omega0sq_implied']
 
-    def fmt(v, u):
-        if u <= 0:
-            return f'{v:g}'.replace('.', ',')
-        exp = int(np.floor(np.log10(abs(u))))
-        factor = 10**(exp-1)
-        u_r = round(abs(u)/factor)*factor
-        d = max(0, -(exp-1))
-        fmt_str = f'{{:.{d}f}}'
-        return fmt_str.format(v).replace('.', ','), fmt_str.format(u_r).replace('.', ',')
+    # Einheitliches Format mit 4 Nachkommastellen fuer lambda und omega_d,
+    # damit visuell ruhige Spalten entstehen; die Werte selbst bleiben
+    # gerundet auf das, was die Unsicherheiten zulassen.
+    def fmt_unc(v, u, decimals=4):
+        fmt_str = f'{{:.{decimals}f}}'
+        return fmt_str.format(v).replace('.', ','), fmt_str.format(u).replace('.', ',')
 
     lines = [
-        r'\begin{tabular}{S[table-format=1.1] c c}',
+        r'\begin{tabular}{S[table-format=1.1] c c S[table-format=1.4]}',
         r'\toprule',
-        r'{$I$ / \si{\ampere}} & $\lambda$ / \si{\per\second} & $\omega_d$ / \si{\per\second} \\',
+        r'{$I$ / \si{\ampere}} & $\lambda$ / \si{\per\second} & $\omega_d$ / \si{\per\second} & {$\omega_d^2{+}\lambda^2$ / \si{\per\square\second}} \\',
         r'\midrule',
     ]
-    for i, ui, l, ul_, o, uo in zip(I, uI, lam, ul, om, uom):
+    for i, ui, l, ul_, o, uo, om0 in zip(I, uI, lam, ul, om, uom, om0sq):
         si = f'{i:.1f}'.replace('.', ',')
-        sl_v, sl_u = fmt(l, ul_)
-        so_v, so_u = fmt(o, uo)
-        lines.append(f'{si} & ${sl_v} \\pm {sl_u}$ & ${so_v} \\pm {so_u}$ \\\\')
+        sl_v, sl_u = fmt_unc(l, ul_, decimals=4)
+        so_v, so_u = fmt_unc(o, uo, decimals=4)
+        som0 = f'{om0:.4f}'.replace('.', ',')
+        lines.append(f'{si} & ${sl_v} \\pm {sl_u}$ & ${so_v} \\pm {so_u}$ & {som0} \\\\')
     lines.append(r'\bottomrule')
     lines.append(r'\end{tabular}')
     (TAB / 'lambda_I.tex').write_text('\n'.join(lines))
+
+
+def write_vergleich_table():
+    """Methoden-Vergleichstabelle für die Diskussion."""
+    with open(OUT / 'results.json') as f:
+        r = json.load(f)
+    sw = r['stopwatch']; cm = r['cassy_main']
+    eye = r['eye']; cd = r['current_dep']; rc = r['resonance']
+
+    def fmt(v, u, decimals):
+        fmt_str = f'{{:.{decimals}f}}'
+        return fmt_str.format(v).replace('.', ',') + r' \pm ' + fmt_str.format(u).replace('.', ',')
+
+    DASH = r'\textemdash'
+    rows = [
+        ('Stoppuhr, 10 Schwingungen', '$\\omega_d$',
+         fmt(sw['omega_d'], sw['u_omega_d'], 4), None),
+        ('CASSY, freie Schwingung', '$\\omega_d$',
+         fmt(cm['omega_d'], cm['u_omega_d'], 4),
+         fmt(cm['lambda'], cm['u_lambda'], 4)),
+        ('Augenamplituden', None, None,
+         fmt(eye['lambda'], eye['u_lambda'], 4)),
+        ('Achsenabschnitt $\\omega_d^2{-}\\lambda^2$', '$\\omega_0$',
+         fmt(cd['omega_0_from_fit'], cd['u_omega_0_from_fit'], 4), None),
+        ('Resonanzkurve', '$\\omega_0$',
+         fmt(rc['omega_0'], rc['u_omega_0'], 4),
+         fmt(rc['lambda'], rc['u_lambda'], 4)),
+    ]
+    lines = [
+        r'\begin{tabular}{lcll}',
+        r'\toprule',
+        r'Methode & Größe & {Wert / \si{\per\second}} & {$\lambda$ / \si{\per\second}} \\',
+        r'\midrule',
+    ]
+    for method, sym, value, lam in rows:
+        sym_s = sym if sym else DASH
+        value_s = f'${value}$' if value else DASH
+        lam_s = f'${lam}$' if lam else DASH
+        lines.append(f'{method} & {sym_s} & {value_s} & {lam_s} \\\\')
+    lines.append(r'\bottomrule')
+    lines.append(r'\end{tabular}')
+    (TAB / 'vergleich.tex').write_text('\n'.join(lines))
 
 
 if __name__ == '__main__':
@@ -124,4 +165,5 @@ if __name__ == '__main__':
     write_amplitudes_table()
     write_resonance_table()
     write_lambda_I_table()
+    write_vergleich_table()
     print('Tables written to', TAB)

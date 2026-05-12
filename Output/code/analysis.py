@@ -312,16 +312,39 @@ def current_dependence_analysis():
 
     fig, ax = plt.subplots(figsize=(6.4, 4.2))
     ax.errorbar(I_arr, lam_arr, xerr=u_I, yerr=u_lam_arr,
-                fmt='o', color='C0', label='Cassy-Fitwerte', markersize=5)
+                fmt='o', color='C0', label='CASSY-Fitwerte', markersize=5)
     I_grid = np.linspace(0, I_arr.max() * 1.05, 200)
     ax.plot(I_grid, quad(I_grid, c_fit), 'r-',
-            label=f'$\\lambda = c\\,I^2$, $c = {c_fit:.3f} \\pm {u_c:.3f}$\\,s$^{{-1}}$A$^{{-2}}$')
+            label=f'$\\lambda = c\\,I^2$,\n$c = {c_fit:.3f} \\pm {u_c:.3f}$\\,s$^{{-1}}$A$^{{-2}}$')
     ax.plot(I_grid, quad_off(I_grid, c2, b2), 'g--', alpha=0.7,
-            label=f'$\\lambda = c\\,I^2 + b$, $b = {b2:.3f} \\pm {u_b2:.3f}$\\,s$^{{-1}}$')
+            label=f'$\\lambda = c\\,I^2 + b$,\n$b = {b2:.3f} \\pm {u_b2:.3f}$\\,s$^{{-1}}$')
     ax.set_xlabel('Spulenstrom $I$ / A')
     ax.set_ylabel(r'Dämpfungskonstante $\lambda$ / s$^{-1}$')
-    ax.legend()
+    ax.legend(loc='upper left', framealpha=0.9)
     fig.savefig(FIG / 'aufgabe6_lambda_I.pdf')
+    plt.close(fig)
+
+    # Implizites omega_0^2 = omega_d^2 + lambda^2 pro Messung
+    # (sollte nach Theorie konstant sein).
+    omega0_sq_implied = omega_arr**2 + lam_arr**2
+
+    # Drift-Diagnoseplot: omega_0^2 implizit vs Spulenstrom, mit
+    # Anfangsamplitude A_0 (Marker-Groesse) als zweite Dimension.
+    fig, ax = plt.subplots(figsize=(6.4, 4.0))
+    A_arr = np.array(A_list)
+    sizes = 30 + 4 * A_arr  # Marker-Groesse proportional zu A_0
+    sc = ax.scatter(I_arr, omega0_sq_implied, s=sizes, c=A_arr,
+                    cmap='viridis', edgecolors='k', linewidths=0.5,
+                    zorder=3)
+    cb = fig.colorbar(sc, ax=ax)
+    cb.set_label('Anfangsamplitude $A_0$ / w.E.')
+    ax.axhline(np.median(omega0_sq_implied[~np.isclose(I_arr, 1.5)]),
+               color='gray', ls='--', alpha=0.6,
+               label='Median (ohne $I=1{,}5$\\,A)')
+    ax.set_xlabel('Spulenstrom $I$ / A')
+    ax.set_ylabel(r'$\omega_d^2 + \lambda^2$ / s$^{-2}$')
+    ax.legend()
+    fig.savefig(FIG / 'aufgabe7_omega0sq_drift.pdf')
     plt.close(fig)
 
     # Aufgabe 7: omega_d^2 + lambda^2 = omega_0^2 (constant)
@@ -406,6 +429,7 @@ def current_dependence_analysis():
         'omega_d': omega_arr.tolist(),
         'u_omega_d': u_omega_arr.tolist(),
         'A0': A_list,
+        'omega0sq_implied': omega0_sq_implied.tolist(),
         'c_quad': c_fit,
         'u_c_quad': u_c,
         'c_off': c2,

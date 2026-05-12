@@ -104,10 +104,8 @@ $\omega$ und der stationären Amplitude
 phasenverschoben gegenüber dem Antrieb
 \cite{Anleitung,Demtroeder}. Das Maximum von $A(\omega)$ liegt bei
 der Resonanzfrequenz $\omega_R=\sqrt{\omega_0^2-2\lambda^2}$.
-Zwischen der Halbwertsbreite\footnote{Bezogen auf die Amplitude bei
-$A_{\max}/\sqrt{2}$; $\Delta\omega$ bezeichnet die halbe Breite
-(HWHM).} $\Delta\omega$ und der Dämpfungskonstante gilt für schwache
-Dämpfung
+Zwischen der Halbwertsbreite $\Delta\omega$ und der
+Dämpfungskonstante gilt für schwache Dämpfung
 \begin{equation}
   \tau\cdot\Delta\omega = 1.
   \label{eq:tau_delta}
@@ -130,8 +128,10 @@ Der Versuchsaufbau besteht aus einer kreisförmigen Kupferscheibe,
 die über eine Spiralfeder in einer Ruhelage gehalten wird und über
 eine Wirbelstrombremse mit einstellbarem Strom $I$ gedämpft werden
 kann \cite{Anleitung}. Die Auslenkung wird berührungsfrei über einen
-Hallsensor erfasst und mit dem Messsystem CASSY aufgezeichnet. Für
-die erzwungene Schwingung treibt ein Schrittmotor das Pendel über
+Hallsensor erfasst und mit dem Messsystem CASSY aufgezeichnet; die
+Sensorspannung ist linear vom Winkel abhängig und wird im Folgenden
+in willkürlichen Einheiten (w.\,E.) angegeben. Für die erzwungene
+Schwingung treibt ein Schrittmotor das Pendel über
 einen Exzenter an; \num{3200}~Schritte des Motors entsprechen einer
 Umdrehung, sodass eine Signalfrequenz von \SI{3200}{\hertz} am
 Frequenzgenerator einer Antriebsfrequenz von \SI{1}{\hertz}
@@ -222,17 +222,35 @@ $\lambda T_d=0{,}2556\pm 0{,}0024$. Mit $T_d$ aus der Stoppuhr folgt
   \qquad
   \tau^{\mathrm{Auge}} = (7{,}95 \pm 0{,}08)\,\si{\second}.
 \end{equation*}
+Zum Vergleich werden die lokalen Amplitudenmaxima des
+CASSY-Signals aus Abb.~\ref{fig:cassy_fit} ebenfalls
+halblogarithmisch aufgetragen (Abbildung
+\ref{fig:cassy_halblog}). Die Punkte folgen über mehr als zwei
+Größenordnungen in $A$ der angepassten Exponentialfunktion mit der
+oben angegebenen Dämpfungskonstanten
+$\lambda^{\mathrm{CASSY}}$.
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=0.78\linewidth]{figures/aufgabe9_amplituden.pdf}
-\caption{Augen-Amplituden in halblogarithmischer Darstellung.
-Blau: in den Fit aufgenommene Punkte mit
-$A>\SI{1,5}{\centi\metre}$, rot die zugehörige gewichtete
-Ausgleichsgerade. Grau: bei kleineren Amplituden zerfällt die
-Schwingung systematisch schneller als die exponentielle
-Anpassung.}
+\begin{subfigure}{0.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{figures/aufgabe9_amplituden.pdf}
+\caption{Augen-Amplituden. Blau: $A>\SI{1,5}{\centi\metre}$, im Fit
+enthalten. Grau: kleinere Amplituden, von der Geraden klar nach
+unten abweichend.}
 \label{fig:amplituden}
+\end{subfigure}\hfill
+\begin{subfigure}{0.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{figures/aufgabe9_cassy_halblog.pdf}
+\caption{Lokale Amplitudenmaxima des CASSY-Signals und
+Exponentialfunktion mit $\lambda^{\mathrm{CASSY}}$.}
+\label{fig:cassy_halblog}
+\end{subfigure}
+\caption{Halblogarithmische Darstellung der gedämpften Schwingung
+für die Augenmessung (links) und die CASSY-Messung (rechts) bei
+$I=\SI{0,35}{\ampere}$.}
+\label{fig:halblog_combo}
 \end{figure}
 
 \subsection{Stromabhängigkeit der Dämpfungskonstante}
@@ -324,8 +342,10 @@ Daraus folgen die Resonanzfrequenz und die Abklingzeit
   \qquad
   \tau = (8{,}01 \pm 0{,}15)\,\si{\second}.
 \end{equation*}
-Die Halbwertsbreite (HWHM) wird numerisch aus der angepassten Kurve
-bestimmt zu $\Delta\omega = \SI{0,125}{\per\second}$. Damit ist
+Die Halbwertsbreite\footnote{Bezogen auf die Amplitude bei
+$A_{\max}/\sqrt{2}$; $\Delta\omega$ bezeichnet die halbe Breite
+(HWHM).} wird numerisch aus der angepassten Kurve bestimmt zu
+$\Delta\omega = \SI{0,125}{\per\second}$. Damit ist
 \begin{equation*}
   \tau\cdot\Delta\omega = 1{,}00,
 \end{equation*}
@@ -345,21 +365,26 @@ Gleichung~(\ref{eq:resonanz}).}
 \section{Diskussion}
 % --------------------------------------------------------------------
 \paragraph{Eigenfrequenz.}
-Die vier Bestimmungen von $\omega_d$ bzw.\ $\omega_0$ liefern
-$\omega_d^{\mathrm{Stop}}=\SI{3,0939(0,0016)}{\per\second}$,
-$\omega_d^{\mathrm{CASSY}}=\SI{3,0988(0,0007)}{\per\second}$,
-$\omega_0^{\mathrm{Achse}}=\SI{3,0894(0,0060)}{\per\second}$ und
-$\omega_0^{\mathrm{Res}}=\SI{3,0915(0,0020)}{\per\second}$. Der für
-schwache Dämpfung erwartete Unterschied
+Die fünf in diesem Versuch gewonnenen Bestimmungen sind in
+Tabelle~\ref{tab:vergleich} gegenübergestellt. Der für schwache
+Dämpfung erwartete Unterschied
 $\omega_0-\omega_d \approx \lambda^2/(2\omega_0)$ liegt bei
 $I=\SI{0,35}{\ampere}$ unter $\SI{0,003}{\per\second}$ und damit
-unter der Auflösung des Vergleichs, sodass alle Werte als
-verträglich gelten. Lediglich Stoppuhr und CASSY weichen mit
-$\SI{0,005}{\per\second}$ um etwa $2{,}8\sigma$ voneinander ab. Für
-eine händische Stoppuhrmessung ist das ein akzeptabler Wert; er
-deutet darauf hin, dass die Stoppuhr-Unsicherheit ohne den
-Typ-B-Reaktionszeitbeitrag noch geringfügig unterschätzt sein
-könnte.
+unter der Auflösung des Vergleichs, sodass alle vier
+$\omega$-Werte als verträglich gelten. Lediglich Stoppuhr und
+CASSY weichen mit $\SI{0,005}{\per\second}$ um etwa $2{,}8\sigma$
+voneinander ab; für eine händische Stoppuhrmessung ist das ein
+akzeptabler Wert, er deutet aber darauf hin, dass die
+Stoppuhr-Unsicherheit ohne den Typ-B-Reaktionszeitbeitrag noch
+geringfügig unterschätzt sein könnte.
+
+\begin{table}[H]
+\centering
+\caption{Übersicht aller Bestimmungen der Eigenfrequenz und der
+Dämpfungskonstante bei $I=\SI{0,35}{\ampere}$.}
+\label{tab:vergleich}
+\input{tables/vergleich.tex}
+\end{table}
 
 \paragraph{Dämpfungskonstante.}
 Auge und CASSY bei $I=\SI{0,35}{\ampere}$ ergeben
@@ -382,16 +407,34 @@ $\omega_0^2$ und damit konstant sein soll, fällt in
 Tabelle~\ref{tab:lambda_I_anh} von
 $\SI{9,69}{\per\square\second}$ bei $I=\SI{0,2}{\ampere}$ über
 $\SI{9,55}{\per\square\second}$ bei mittlerer Dämpfung auf
-$\SI{9,27}{\per\square\second}$ bei $I=\SI{1,2}{\ampere}$. Dieser
-Rückgang um etwa $4\,\%$ ist der Grund, warum die Ausgleichsgerade
-in Abb.~\ref{fig:omega_lambda} mit Steigung $-1{,}11\pm 0{,}03$
+$\SI{9,27}{\per\square\second}$ bei $I=\SI{1,2}{\ampere}$
+(Abbildung~\ref{fig:omega0sq_drift}). Dieser Rückgang um etwa
+$4\,\%$ ist der Grund, warum die Ausgleichsgerade in
+Abb.~\ref{fig:omega_lambda} mit Steigung $-1{,}11\pm 0{,}03$
 geringfügig steiler verläuft als der theoretische Wert $-1$: bei
 großem $\lambda^2$ liegt $\omega_d^2$ tiefer, als das einfache
-Modell vorhersagt. Mögliche Ursachen sind eine schwach
-amplitudenabhängige Winkelrichtgröße (Federnichtlinearität), eine
-kleine zusätzliche Reibung oder fitsystematische Effekte bei sehr
-kurzen Schwingungsfenstern. Quantitativ bleibt die Abweichung mit
-$4\,\%$ klein und beeinträchtigt die übrigen Aussagen nicht.
+Modell vorhersagt. Die Anfangsamplitude $A_0$ liegt für die
+meisten Messungen im engen Bereich \numrange{53}{62}~w.\,E.\ und
+korreliert nicht mit der Drift, wie an der Farbcodierung in
+Abb.~\ref{fig:omega0sq_drift} sichtbar ist; eine
+amplitudenabhängige Winkelrichtgröße als Ursache ist damit
+unwahrscheinlich. Wahrscheinlicher sind fitsystematische Effekte:
+Bei hoher Dämpfung enthält das Fitfenster nur wenige
+Schwingungsperioden, sodass kleine Modellabweichungen (etwa eine
+zusätzliche Coulomb-Reibung wie in Abb.~\ref{fig:amplituden})
+stärker auf die extrahierten $\omega_d$- und $\lambda$-Werte
+durchschlagen. Quantitativ bleibt die Drift mit $4\,\%$ klein und
+beeinträchtigt die übrigen Aussagen nicht.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.72\linewidth]{figures/aufgabe7_omega0sq_drift.pdf}
+\caption{Implizites $\omega_0^2=\omega_d^2+\lambda^2$ aus jeder
+CASSY-Anpassung gegen den Spulenstrom $I$. Die Färbung der Punkte
+codiert die Anfangsamplitude $A_0$; die gestrichelte Linie ist der
+Median über alle Messungen mit $I\leq\SI{1,4}{\ampere}$.}
+\label{fig:omega0sq_drift}
+\end{figure}
 
 \paragraph{Stromabhängigkeit und Coulomb-Reibung.}
 Über knapp zwei Dekaden in $\lambda$ folgen die Datenpunkte in
@@ -447,15 +490,15 @@ Wirbelstrombremse.
 \centering
 \begin{minipage}{0.45\linewidth}
 \centering
-\caption{Rohdaten der Stoppuhrmessung (Aufgabe 1): Zeit für je
-zehn Schwingungen bei \SI{0,35}{\ampere}.}
+\caption{Stoppuhrmessung (Aufgabe~1): fünfmal die Zeit für zehn
+Schwingungen bei \SI{0,35}{\ampere}.}
 \label{tab:t10_anh}
 \input{tables/t10.tex}
 \end{minipage}\hfill
 \begin{minipage}{0.50\linewidth}
 \centering
-\caption{Rohdaten der Augen-Amplitudenmessung (Aufgabe 2):
-zwei Durchgänge, $u(A)=\SI{0,1}{\centi\metre}$.}
+\caption{Augen-Amplitudenmessung (Aufgabe~2) in zwei Durchgängen,
+$u(A)=\SI{0,1}{\centi\metre}$.}
 \label{tab:amplituden_anh}
 \input{tables/amplitudes.tex}
 \end{minipage}
@@ -463,9 +506,9 @@ zwei Durchgänge, $u(A)=\SI{0,1}{\centi\metre}$.}
 
 \begin{table}[H]
 \centering
-\caption{Rohdaten der Resonanzmessung (Aufgabe 4): Frequenz des
-Signalgenerators, abgelesene Maximalamplitude, daraus berechnete
-Antriebsfrequenz und Kreisfrequenz.}
+\caption{Resonanzmessung (Aufgabe~4) mit der eingestellten
+Frequenz des Signalgenerators, der abgelesenen Maximalamplitude
+sowie der daraus berechneten Antriebsfrequenz und Kreisfrequenz.}
 \label{tab:resonanz_anh}
 \input{tables/resonance.tex}
 \end{table}
